@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>好樣子企業教練團隊 | 企業內訓與政府資源整合專家</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Oswald:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            bg: '#F8F9FA',      /* 專業淺灰底 */
+                            primary: '#F59E0B', /* 活力橘 (延續品牌色) */
+                            secondary: '#1E293B', /* 深藍灰 (強調商務專業) */
+                            accent: '#3B82F6',  /* 科技藍 (代表政府資源/知識) */
+                            text: '#334155',
+                            light: '#FFFFFF'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                        display: ['"Oswald"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #F8F9FA;
+            color: #334155;
+            font-family: 'Noto Sans TC', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* 網格背景 - 代表SOP與結構 */
+        .grid-bg {
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* 專業導覽列 */
+        .nav-sticky {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        /* 卡片懸浮效果 */
+        .feature-card {
+            transition: all 0.3s ease;
+            border-bottom: 4px solid transparent;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-bottom-color: #F59E0B;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        /* 按鈕樣式 */
+        .btn-primary {
+            background: #F59E0B;
+            color: white;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: #D97706;
+            transition: width 0.3s;
+            z-index: -1;
+        }
+        .btn-primary:hover::before {
+            width: 100%;
+        }
+
+        /* 幾何裝飾 */
+        .shape-deco {
+            position: absolute;
+            z-index: -1;
+            opacity: 0.1;
+        }
+        
+        /* 步驟連接線 */
+        .step-line::after {
+            content: '';
+            position: absolute;
+            top: 2rem;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: #E2E8F0;
+            z-index: -1;
+        }
+        @media (max-width: 768px) {
+            .step-line::after {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="grid-bg">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 transition-all duration-300 py-4 bg-white/80 backdrop-blur-md border-b border-gray-100" id="navbar">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded bg-brand-primary text-white flex items-center justify-center font-bold text-xl shadow-lg shadow-orange-200">
+                    G
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight text-brand-secondary">好樣子 <span class="text-brand-primary">Good Guys</span></h1>
+                    <p class="text-[10px] text-gray-500 tracking-wider uppercase font-medium">Corporate Training & Consulting</p>
+                </div>
+            </div>
+
+            <div class="hidden md:flex items-center gap-8 text-sm font-bold text-gray-600">
+                <a href="#solutions" class="hover:text-brand-primary transition-colors">解決方案</a>
+                <a href="#government" class="hover:text-brand-primary transition-colors">政府資源整合</a>
+                <a href="#sop" class="hover:text-brand-primary transition-colors">制度優化</a>
+                <a href="#contact" class="px-5 py-2.5 btn-primary rounded hover:shadow-lg transition-all">
+                    預約企業診斷
+                </a>
+            </div>
+
+            <button class="md:hidden text-gray-600">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <!-- 幾何背景裝飾 -->
+        <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-orange-50 to-transparent skew-x-12 transform translate-x-20 -z-10"></div>
+        
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+                <div class="lg:w-1/2 relative z-10">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded bg-blue-50 border border-blue-100 text-blue-700 text-xs font-bold tracking-wider mb-6 animate-fade-in-up">
+                        <i data-lucide="award" class="w-3 h-3"></i> 專業企業內訓首選團隊
+                    </div>
+                    
+                    <h1 class="text-4xl lg:text-6xl font-bold leading-tight mb-6 text-brand-secondary animate-fade-in-up delay-100">
+                        為企業打造<br>
+                        更有競爭力的 <span class="text-brand-primary relative inline-block">
+                            好樣子
+                            <svg class="absolute w-full h-3 -bottom-1 left-0 text-brand-primary opacity-30" viewBox="0 0 100 10" preserveAspectRatio="none">
+                                <path d="M0 5 Q 50 10 100 5" stroke="currentColor" stroke-width="8" fill="none" />
+                            </svg>
+                        </span>
+                    </h1>
+                    
+                    <p class="text-lg text-gray-500 mb-8 leading-relaxed animate-fade-in-up delay-200">
+                        深度結合<span class="font-bold text-gray-700">政府補助資源</span>與<span class="font-bold text-gray-700">最新職能訓練</span>，
+                        協助企業優化 SOP 流程、提升人才專業度。我們不只是講師，更是推動組織升級的策略夥伴。
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row gap-4 animate-fade-in-up delay-300">
+                        <a href="#contact" class="px-8 py-4 btn-primary rounded font-bold shadow-lg shadow-orange-100 flex items-center justify-center gap-2">
+                            申請政府補助諮詢 <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                        <a href="#solutions" class="px-8 py-4 bg-white text-gray-700 border border-gray-200 rounded font-bold hover:bg-gray-50 transition-all flex items-center justify-center gap-2">
+                            瀏覽培訓課程
+                        </a>
+                    </div>
+                    
+                    <div class="mt-10 flex items-center gap-6 text-gray-400 text-sm font-medium animate-fade-in-up delay-400">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-green-500"></i> 政府認證講師
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-green-500"></i> 實務 SOP 導入
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-green-500"></i> 補助計畫撰寫
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:w-1/2 relative">
+                    <div class="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
+                        <img src="https://i.meee.com.tw/9ipAosN.jpg" alt="Corporate Training" class="w-full h-auto object-cover transform hover:scale-105 transition-transform duration-700">
+                        <!-- 浮動數據卡片 -->
+                        <div class="absolute bottom-6 left-6 bg-white p-4 rounded-lg shadow-lg flex items-center gap-4 animate-bounce-slow">
+                            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-600">
+                                <i data-lucide="trending-up" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500 uppercase font-bold">企業效率提升</p>
+                                <p class="text-xl font-bold text-brand-secondary">+45%</p>
+                            </div>
+                        </div>
+                        <div class="absolute top-6 right-6 bg-brand-secondary text-white p-4 rounded-lg shadow-lg">
+                            <p class="text-xs opacity-70 uppercase font-bold mb-1">政府資源導入</p>
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="coins" class="w-4 h-4 text-yellow-400"></i>
+                                <span class="font-bold">經費補助優化</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 背景裝飾點 -->
+                    <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-orange-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pain Points / Why Us -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-3xl font-bold text-brand-secondary mb-4">企業成長的隱形天花板</h2>
+                <p class="text-gray-500">
+                    許多企業擁有優秀的產品，卻因為內部制度混亂或缺乏資源整合，導致成長停滯。好樣子協助您突破瓶頸。
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Item 1 -->
+                <div class="bg-gray-50 p-8 rounded-xl border border-gray-100 hover:border-brand-primary transition-colors group">
+                    <div class="w-12 h-12 bg-white rounded-lg shadow-sm flex items-center justify-center text-red-500 mb-6 group-hover:bg-red-500 group-hover:text-white transition-all">
+                        <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-gray-800">SOP 流於形式</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">
+                        標準作業程序（SOP）無法落地執行，員工操作不一，導致品質不穩定，甚至專業知識無法傳承。
+                    </p>
+                </div>
+                <!-- Item 2 -->
+                <div class="bg-gray-50 p-8 rounded-xl border border-gray-100 hover:border-brand-primary transition-colors group">
+                    <div class="w-12 h-12 bg-white rounded-lg shadow-sm flex items-center justify-center text-red-500 mb-6 group-hover:bg-red-500 group-hover:text-white transition-all">
+                        <i data-lucide="users" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-gray-800">人才職能斷層</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">
+                        缺乏系統性的教育訓練，導致中高階主管管理能力不足，新進員工上手慢，企業競爭力下滑。
+                    </p>
+                </div>
+                <!-- Item 3 -->
+                <div class="bg-gray-50 p-8 rounded-xl border border-gray-100 hover:border-brand-primary transition-colors group">
+                    <div class="w-12 h-12 bg-white rounded-lg shadow-sm flex items-center justify-center text-red-500 mb-6 group-hover:bg-red-500 group-hover:text-white transition-all">
+                        <i data-lucide="file-question" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-gray-800">錯失政府資源</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">
+                        不知道如何申請政府職能補助計畫，或因計畫撰寫繁瑣而放棄，白白錯失讓國家幫你養人才的機會。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Solutions -->
+    <section id="solutions" class="py-24 bg-brand-secondary text-white relative overflow-hidden">
+        <!-- 背景裝飾 -->
+        <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 30px 30px;"></div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+                <div>
+                    <span class="text-brand-primary font-bold tracking-widest uppercase text-sm">Our Solutions</span>
+                    <h2 class="text-3xl md:text-5xl font-bold mt-2">好樣子企業全方位解方</h2>
+                </div>
+                <p class="text-gray-400 max-w-md">
+                    我們提供的不只是課程，而是從診斷、規劃到執行的一站式企業升級服務。
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Solution 1: 政府資源 -->
+                <div id="government" class="bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-2xl hover:bg-white/10 transition-all group">
+                    <div class="w-14 h-14 bg-brand-primary/20 text-brand-primary rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="landmark" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">政府資源整合</h3>
+                    <ul class="space-y-3 text-gray-300 text-sm">
+                        <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-primary mt-0.5"></i> 企業人力資源提升計畫申請</li>
+                        <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-primary mt-0.5"></i> 小型企業人力提升計畫 (小人提)</li>
+                        <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-primary mt-0.5"></i> 職能導向課程品質認證 (iCAP)</li>
+                    </ul>
+                </div>
+
+                <!-- Solution 2: 專業內訓 -->
+                <div class="bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-2xl hover:bg-white/10 transition-all group">
+                    <div class="w-14 h-14 bg-blue-500/20 text-blue-400 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="graduation-cap" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">專業職能內訓</h3>
+                    <ul class="space-y-3 text-gray-300 text-sm">
+                        <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-blue-400 mt-0.5"></i> 最新產業趨勢與法規更新</li>
+                        <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-blue-400 mt-0.5"></i> 數位轉型與 AI 工具應用</li>
+                        <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-blue-400 mt-0.5"></i> 溝通領導與團隊建立工作坊</li>
+                    </ul>
+                </div>
+
+                <!-- Solution 3: SOP 優化 -->
+                <div id="sop" class="bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-2xl hover:bg-white/10 transition-all group">
+                    <div class="w-14 h-14 bg-green-500/20 text-green-400 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="settings-2" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">制度與 SOP 優化</h3>
+                    <ul class="space-y-3 text-gray-300 text-sm">
+                        <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-green-400 mt-0.5"></i> 工作流程診斷與再設計</li>
+                        <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-green-400 mt-0.5"></i> 崗位職責說明書 (JD) 建置</li>
+                        <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-green-400 mt-0.5"></i> 績效考核制度規劃顧問</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process -->
+    <section class="py-24 bg-brand-bg">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <span class="text-brand-primary font-bold tracking-widest uppercase text-sm">Our Process</span>
+                <h2 class="text-3xl font-bold text-brand-secondary mt-2">如何讓企業變好樣子？</h2>
+            </div>
+
+            <div class="relative flex flex-col md:flex-row justify-between items-center max-w-5xl mx-auto step-line">
+                <!-- Step 1 -->
+                <div class="flex flex-col items-center text-center relative z-10 w-full md:w-1/4 mb-10 md:mb-0">
+                    <div class="w-16 h-16 bg-white border-2 border-brand-primary rounded-full flex items-center justify-center text-xl font-bold text-brand-primary shadow-md mb-4">01</div>
+                    <h4 class="font-bold text-lg mb-2">需求診斷</h4>
+                    <p class="text-sm text-gray-500 px-4">深入訪談，釐清企業痛點與發展目標。</p>
+                </div>
+                <!-- Step 2 -->
+                <div class="flex flex-col items-center text-center relative z-10 w-full md:w-1/4 mb-10 md:mb-0">
+                    <div class="w-16 h-16 bg-white border-2 border-brand-primary rounded-full flex items-center justify-center text-xl font-bold text-brand-primary shadow-md mb-4">02</div>
+                    <h4 class="font-bold text-lg mb-2">資源盤點</h4>
+                    <p class="text-sm text-gray-500 px-4">評估可用政府補助方案，規劃預算效益。</p>
+                </div>
+                <!-- Step 3 -->
+                <div class="flex flex-col items-center text-center relative z-10 w-full md:w-1/4 mb-10 md:mb-0">
+                    <div class="w-16 h-16 bg-white border-2 border-brand-primary rounded-full flex items-center justify-center text-xl font-bold text-brand-primary shadow-md mb-4">03</div>
+                    <h4 class="font-bold text-lg mb-2">客製方案</h4>
+                    <p class="text-sm text-gray-500 px-4">設計專屬課程與SOP導入計畫，並協助送件。</p>
+                </div>
+                <!-- Step 4 -->
+                <div class="flex flex-col items-center text-center relative z-10 w-full md:w-1/4">
+                    <div class="w-16 h-16 bg-brand-primary text-white rounded-full flex items-center justify-center text-xl font-bold shadow-md mb-4">04</div>
+                    <h4 class="font-bold text-lg mb-2">執行與優化</h4>
+                    <p class="text-sm text-gray-500 px-4">落地執行訓練，追蹤成效並持續優化迭代。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials / Impact -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80&w=1200" alt="Team Success" class="rounded-2xl shadow-xl grayscale hover:grayscale-0 transition-all duration-500">
+                </div>
+                <div>
+                    <h2 class="text-3xl font-bold text-brand-secondary mb-6">實戰成效見證</h2>
+                    <div class="space-y-6">
+                        <div class="bg-gray-50 p-6 rounded-xl border-l-4 border-brand-primary">
+                            <p class="text-gray-600 mb-4 italic">"透過好樣子團隊協助申請政府計畫，我們不僅獲得了教育訓練經費，更藉此機會重新梳理了業務SOP，讓新進員工的培訓時間縮短了 40%。"</p>
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-gray-300 rounded-full"></div>
+                                <div>
+                                    <p class="text-sm font-bold text-gray-800">張總經理</p>
+                                    <p class="text-xs text-gray-500">知名精密機械製造業</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 p-6 rounded-xl border-l-4 border-blue-500">
+                            <p class="text-gray-600 mb-4 italic">"以前覺得政府補助很難申請，好樣子顧問團隊非常專業，從計畫撰寫到核銷一手包辦，讓我們能專注在課程學習上，真的讓公司變成了更好的樣子。"</p>
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-gray-300 rounded-full"></div>
+                                <div>
+                                    <p class="text-sm font-bold text-gray-800">林營運長</p>
+                                    <p class="text-xs text-gray-500">連鎖餐飲集團</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact / CTA -->
+    <section id="contact" class="py-24 bg-brand-secondary relative overflow-hidden">
+        <div class="absolute right-0 top-0 w-1/3 h-full bg-brand-primary skew-x-12 translate-x-20 opacity-90 hidden md:block"></div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="flex flex-col md:flex-row gap-16">
+                <div class="md:w-1/2 text-white">
+                    <h2 class="text-4xl font-bold mb-6">讓好樣子成為<br>企業成長的加速器</h2>
+                    <p class="text-gray-300 mb-10 text-lg">
+                        無論您是需要優化內部流程，還是希望爭取政府職能訓練補助，我們都準備好為您量身打造最佳方案。
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center text-brand-primary">
+                                <i data-lucide="phone" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400 uppercase font-bold">聯絡專線</p>
+                                <p class="text-xl font-bold">02-2345-6789</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center text-brand-primary">
+                                <i data-lucide="mail" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400 uppercase font-bold">Email</p>
+                                <p class="text-xl font-bold">service@goodguystudio.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="md:w-1/2 bg-white rounded-2xl shadow-2xl p-8 md:p-10">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6">預約企業免費診斷</h3>
+                    <form class="space-y-5">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-2">聯絡人姓名</label>
+                                <input type="text" class="w-full bg-gray-50 border border-gray-200 rounded px-4 py-3 focus:outline-none focus:border-brand-primary transition-colors">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-2">公司名稱</label>
+                                <input type="text" class="w-full bg-gray-50 border border-gray-200 rounded px-4 py-3 focus:outline-none focus:border-brand-primary transition-colors">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">聯絡電話</label>
+                            <input type="tel" class="w-full bg-gray-50 border border-gray-200 rounded px-4 py-3 focus:outline-none focus:border-brand-primary transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">您感興趣的服務</label>
+                            <select class="w-full bg-gray-50 border border-gray-200 rounded px-4 py-3 focus:outline-none focus:border-brand-primary transition-colors">
+                                <option>政府補助計畫申請 (小人提/人提)</option>
+                                <option>企業內訓課程規劃</option>
+                                <option>SOP 流程與制度優化</option>
+                                <option>其他顧問諮詢</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">需求簡述</label>
+                            <textarea rows="3" class="w-full bg-gray-50 border border-gray-200 rounded px-4 py-3 focus:outline-none focus:border-brand-primary transition-colors"></textarea>
+                        </div>
+                        <button type="button" class="w-full py-4 bg-brand-primary text-white font-bold rounded hover:bg-orange-600 transition-colors shadow-lg">
+                            立即送出諮詢
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-white py-12 border-t border-slate-800">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-xl font-bold">Good Guy Studio</span>
+                        <span class="text-xs bg-brand-primary px-2 py-0.5 rounded text-white font-bold">B2B</span>
+                    </div>
+                    <p class="text-slate-400 text-sm">Empowering Businesses, Optimizing Potential.</p>
+                </div>
+                <div class="flex gap-8 text-sm text-slate-400">
+                    <a href="#" class="hover:text-white transition-colors">關於我們</a>
+                    <a href="#" class="hover:text-white transition-colors">服務條款</a>
+                    <a href="#" class="hover:text-white transition-colors">隱私權政策</a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-slate-800 text-center text-xs text-slate-600">
+                &copy; 2025 好樣子企業顧問有限公司. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 初始化 Icons
+        lucide.createIcons();
+
+        // Navbar 滾動效果
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('shadow-md');
+            } else {
+                navbar.classList.remove('shadow-md');
+            }
+        });
+
+        // GSAP 動畫
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Hero 元素依序進場
+        gsap.from(".animate-fade-in-up", {
+            y: 30,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.2,
+            ease: "power2.out"
+        });
+
+        // 浮動卡片動畫
+        gsap.to(".animate-bounce-slow", {
+            y: -10,
+            duration: 2,
+            repeat: -1,
+            yoyo: true,
+            ease: "power1.inOut"
+        });
+
+        // Section Title 動畫
+        gsap.utils.toArray('section h2').forEach(title => {
+            gsap.from(title, {
+                scrollTrigger: {
+                    trigger: title,
+                    start: "top 85%",
+                },
+                y: 30,
+                opacity: 0,
+                duration: 0.8
+            });
+        });
+
+    </script>
+</body>
+</html>
